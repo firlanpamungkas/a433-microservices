@@ -1,0 +1,25 @@
+# Menggunakan version 3.7
+version: '3.7'
+
+services:
+# Mengatur service untuk container item-db
+  item-db:
+    image: mongo:3 # Menggunakan image mongo:3 dari Docker Hub
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - app-db:/data/db # Menggunakan volume app-db dengan target /data/db di container
+
+# Mengatur service untuk container item-app
+  item-app:
+    image: firlan/item-app:v1
+    depends_on:
+      - item-db # Menjalankan item-app setelah item-db diluncurkan
+    restart: always
+    ports:
+      - "80:8080" # Port mapping dari host ke container
+      
+# Mengatur bridge volume untuk item-db
+volumes:
+  app-db: # Membuat volume bernama app-db
